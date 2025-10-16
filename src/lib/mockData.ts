@@ -178,6 +178,20 @@ export const mockBooks: Book[] = [
     publishedYear: 1950,
     pageCount: 767,
     isInLibrary: false
+  },
+  {
+    id: '13',
+    title: 'Sample Book from Mega',
+    author: 'Unknown Author',
+    coverUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Sample&backgroundColor=1f2937',
+    description: 'A sample book added from Mega file sharing platform.',
+    pdfUrl: 'https://mega.nz/file/C9oTUCrR#hcWg5b6XIxsRNnHsEeQk9sc76aMzc35mxiDdMIQduh4',
+    format: 'PDF',
+    genre: 'General',
+    rating: 4.0,
+    publishedYear: 2024,
+    pageCount: 100,
+    isInLibrary: true
   }
 ]
 
