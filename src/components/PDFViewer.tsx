@@ -12,7 +12,8 @@ import {
   Maximize, 
   Settings,
   BookOpen,
-  ArrowLeft
+  ArrowLeft,
+  Menu
 } from 'lucide-react'
 import { Book } from '@/types'
 
@@ -35,6 +36,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showThumbnails, setShowThumbnails] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [showMobileControls, setShowMobileControls] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
@@ -75,6 +77,35 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
   const goToPage = (pageNumber: number) => {
     setCurrentPage(pageNumber)
     setShowThumbnails(false)
+  }
+
+  // Mobile touch gestures
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    const startX = touch.clientX
+    const startY = touch.clientY
+    
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touch = e.changedTouches[0]
+      const endX = touch.clientX
+      const endY = touch.clientY
+      
+      const deltaX = endX - startX
+      const deltaY = endY - startY
+      
+      // Swipe left/right for page navigation
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+          goToPreviousPage()
+        } else {
+          goToNextPage()
+        }
+      }
+      
+      document.removeEventListener('touchend', handleTouchEnd)
+    }
+    
+    document.addEventListener('touchend', handleTouchEnd)
   }
 
   useEffect(() => {
@@ -120,36 +151,47 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
     <div 
       ref={containerRef}
       className={`fixed inset-0 bg-black z-50 flex flex-col ${isFullscreen ? 'p-0' : ''}`}
+      onTouchStart={handleTouchStart}
     >
       {/* Header Controls */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between p-4 bg-gray-900/90 backdrop-blur-sm"
+        className="flex items-center justify-between p-3 sm:p-4 bg-gray-900/90 backdrop-blur-sm"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onClose}
-            className="flex items-center gap-2 px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors touch-target"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back
+            <span className="hidden sm:inline">Back</span>
           </motion.button>
           
           <div className="text-white">
-            <h1 className="text-lg font-semibold">{book.title}</h1>
-            <p className="text-sm text-gray-300">by {book.author}</p>
+            <h1 className="text-base sm:text-lg font-semibold line-clamp-1">{book.title}</h1>
+            <p className="text-xs sm:text-sm text-gray-300 line-clamp-1">by {book.author}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
+          {/* Mobile Menu Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowMobileControls(!showMobileControls)}
+            className="md:hidden p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
+          >
+            <Menu className="w-5 h-5" />
+          </motion.button>
+          
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowThumbnails(!showThumbnails)}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors"
+            className="hidden md:block p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
           >
             <BookOpen className="w-5 h-5" />
           </motion.button>
@@ -158,12 +200,12 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={zoomOut}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
           >
-            <ZoomOut className="w-5 h-5" />
+            <ZoomOut className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
           
-          <span className="text-white text-sm px-2">
+          <span className="text-white text-xs sm:text-sm px-2">
             {Math.round(scale * 100)}%
           </span>
           
@@ -171,16 +213,16 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={zoomIn}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
           >
-            <ZoomIn className="w-5 h-5" />
+            <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
           
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={rotate}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors"
+            className="hidden sm:block p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
           >
             <RotateCw className="w-5 h-5" />
           </motion.button>
@@ -189,12 +231,62 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleFullscreen}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
           >
-            <Maximize className="w-5 h-5" />
+            <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
         </div>
       </motion.div>
+
+      {/* Mobile Controls Overlay */}
+      {showMobileControls && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden bg-gray-900/95 backdrop-blur-sm p-4 border-b border-gray-700"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={goToPreviousPage}
+                disabled={currentPage <= 1}
+                className="p-3 bg-gray-700 text-white rounded-lg disabled:opacity-50 touch-target"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </motion.button>
+              <span className="text-white text-sm">
+                {currentPage} / {numPages}
+              </span>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={goToNextPage}
+                disabled={currentPage >= numPages}
+                className="p-3 bg-gray-700 text-white rounded-lg disabled:opacity-50 touch-target"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </motion.button>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={rotate}
+                className="p-3 bg-gray-700 text-white rounded-lg touch-target"
+              >
+                <RotateCw className="w-5 h-5" />
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowThumbnails(!showThumbnails)}
+                className="p-3 bg-gray-700 text-white rounded-lg touch-target"
+              >
+                <BookOpen className="w-5 h-5" />
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <div className="flex flex-1 overflow-hidden">
         {/* Thumbnail Sidebar */}
@@ -203,16 +295,16 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             initial={{ x: -300 }}
             animate={{ x: 0 }}
             exit={{ x: -300 }}
-            className="w-64 bg-gray-800 p-4 overflow-y-auto"
+            className="w-48 sm:w-64 bg-gray-800 p-3 sm:p-4 overflow-y-auto"
           >
-            <h3 className="text-white font-semibold mb-4">Pages</h3>
+            <h3 className="text-white font-semibold mb-4 text-sm sm:text-base">Pages</h3>
             <div className="space-y-2">
               {Array.from({ length: numPages }, (_, i) => i + 1).map((pageNum) => (
                 <motion.button
                   key={pageNum}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => goToPage(pageNum)}
-                  className={`w-full p-2 text-left rounded transition-colors ${
+                  className={`w-full p-2 text-left rounded transition-colors touch-target ${
                     pageNum === currentPage 
                       ? 'bg-red-600 text-white' 
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -240,10 +332,10 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
         )}
 
         {/* Main PDF Viewer */}
-        <div className="flex-1 flex flex-col items-center justify-center bg-gray-900 overflow-auto">
+        <div className="flex-1 flex flex-col items-center justify-center bg-gray-900 overflow-auto mobile-scroll">
           {isLoading && (
             <div className="flex items-center justify-center">
-              <div className="text-white text-xl">Loading PDF...</div>
+              <div className="text-white text-lg sm:text-xl">Loading PDF...</div>
             </div>
           )}
           
@@ -269,20 +361,20 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between p-4 bg-gray-900/90 backdrop-blur-sm"
+        className="flex items-center justify-between p-3 sm:p-4 bg-gray-900/90 backdrop-blur-sm"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={goToPreviousPage}
             disabled={currentPage <= 1}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-target"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
           
-          <span className="text-white">
+          <span className="text-white text-sm sm:text-base">
             Page {currentPage} of {numPages}
           </span>
           
@@ -291,14 +383,14 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileTap={{ scale: 0.95 }}
             onClick={goToNextPage}
             disabled={currentPage >= numPages}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-target"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
         </div>
 
         {/* Progress Bar */}
-        <div className="flex-1 mx-8">
+        <div className="flex-1 mx-4 sm:mx-8">
           <div className="bg-gray-700 h-2 rounded-full overflow-hidden">
             <div
               className="bg-red-600 h-full transition-all duration-300"
@@ -307,7 +399,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
           </div>
         </div>
 
-        <div className="text-white text-sm">
+        <div className="text-white text-xs sm:text-sm">
           {Math.round((currentPage / numPages) * 100)}% Complete
         </div>
       </motion.div>

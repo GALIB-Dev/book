@@ -28,6 +28,7 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onBookClick(book)}
       whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.2 }}
     >
       {/* Book Cover */}
@@ -39,7 +40,7 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
           author={book.author}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-110"
-          sizes="(max-width: 768px) 200px, 256px"
+          sizes="(max-width: 640px) 150px, (max-width: 768px) 200px, 256px"
         />
         
         {/* Gradient Overlay on Hover */}
@@ -59,11 +60,56 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
           </div>
         )}
         
-        {/* Hover Controls */}
+        {/* Mobile Touch Controls - Always visible on mobile */}
+        <div className="absolute inset-0 md:hidden">
+          <div className="absolute bottom-2 left-2 right-2 flex justify-between items-end">
+            <div className="text-white">
+              <h3 className="font-semibold text-xs mb-1 line-clamp-2">
+                {book.title}
+              </h3>
+              <p className="text-xs text-gray-300 mb-1">
+                {book.author}
+              </p>
+              <div className="flex items-center gap-1 text-xs">
+                <span className="bg-yellow-500 text-black px-1 py-0.5 rounded font-medium">
+                  ★ {book.rating}
+                </span>
+                <span className="text-gray-300">{book.publishedYear}</span>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-1">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onBookClick(book)
+                }}
+                className="w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-lg touch-target"
+              >
+                <Play className="w-3 h-3 text-black" fill="currentColor" />
+              </motion.button>
+              
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={handleAddToLibrary}
+                className="w-7 h-7 bg-gray-700/80 rounded-full flex items-center justify-center shadow-lg touch-target"
+              >
+                {isInLibrary ? (
+                  <Check className="w-3 h-3 text-white" />
+                ) : (
+                  <Plus className="w-3 h-3 text-white" />
+                )}
+              </motion.button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Desktop Hover Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 20 }}
-          className="absolute bottom-4 left-4 right-4 flex justify-between items-end"
+          className="absolute bottom-4 left-4 right-4 flex justify-between items-end hidden md:block"
         >
           <div className="text-white">
             <h3 className="font-semibold text-sm mb-1 line-clamp-2">
@@ -112,7 +158,7 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
         {book.currentPage && (
           <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            Continue
+            <span className="hidden sm:inline">Continue</span>
           </div>
         )}
         
