@@ -36,7 +36,7 @@ export function HeroSection({ featuredBook }: HeroSectionProps) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex h-full items-center">
+      <div className="relative z-10 flex h-full items-center bg-gradient-to-b from-black/40 via-black/10 to-transparent">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -44,7 +44,7 @@ export function HeroSection({ featuredBook }: HeroSectionProps) {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold gradient-text mb-4">
               {featuredBook.title}
             </h1>
             
@@ -71,7 +71,7 @@ export function HeroSection({ featuredBook }: HeroSectionProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center gap-2 bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+                className="flex items-center justify-center gap-2 bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors btn-shine"
               >
                 <Play className="w-5 h-5" fill="currentColor" />
                 Start Reading
@@ -80,7 +80,7 @@ export function HeroSection({ featuredBook }: HeroSectionProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center gap-2 bg-gray-700/80 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-600/80 transition-colors"
+                className="flex items-center justify-center gap-2 glass text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
               >
                 <Info className="w-5 h-5" />
                 More Info
@@ -90,7 +90,7 @@ export function HeroSection({ featuredBook }: HeroSectionProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleAddToLibrary}
-                className="flex items-center justify-center gap-2 bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-black transition-colors"
+                className="flex items-center justify-center gap-2 bg-transparent border-2 border-white/70 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-black transition-colors"
               >
                 {isInLibrary ? (
                   <>

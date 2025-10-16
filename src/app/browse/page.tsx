@@ -35,14 +35,14 @@ export default function BrowsePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pt-20 px-4 mobile-padding">
+    <div className="min-h-screen bg-black bg-grid text-white pt-20 px-4 mobile-padding">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-2xl sm:text-3xl font-bold mb-6">Browse Books</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold gradient-text mb-6">Browse Books</h1>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <input

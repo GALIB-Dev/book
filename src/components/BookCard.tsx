@@ -23,7 +23,7 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
 
   return (
     <motion.div
-      className="relative group cursor-pointer"
+      className="relative group cursor-pointer card-glow"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onBookClick(book)}
@@ -47,7 +47,7 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered ? 1 : 0 }}
-          className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
         />
         
         {/* Reading Progress Bar */}

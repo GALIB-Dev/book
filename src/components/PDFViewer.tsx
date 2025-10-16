@@ -157,7 +157,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between p-3 sm:p-4 bg-gray-900/90 backdrop-blur-sm"
+        className="flex items-center justify-between p-3 sm:p-4 bg-gray-900/90 backdrop-blur-sm glass"
       >
         <div className="flex items-center gap-3 sm:gap-4">
           <motion.button
@@ -200,7 +200,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={zoomOut}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target btn-shine"
           >
             <ZoomOut className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
@@ -213,7 +213,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={zoomIn}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target btn-shine"
           >
             <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
@@ -231,7 +231,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleFullscreen}
-            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target"
+            className="p-2 text-white hover:bg-gray-700 rounded transition-colors touch-target btn-shine"
           >
             <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
@@ -243,7 +243,7 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-gray-900/95 backdrop-blur-sm p-4 border-b border-gray-700"
+          className="md:hidden bg-gray-900/95 backdrop-blur-sm p-4 border-b border-gray-700 glass"
         >
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">

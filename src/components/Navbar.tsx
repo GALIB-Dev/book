@@ -34,7 +34,7 @@ export function Navbar({ isScrolled, onSearchClick, user }: NavbarProps) {
             <Link href="/">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="text-2xl font-bold text-red-600 cursor-pointer"
+                className="text-2xl font-bold gradient-text cursor-pointer"
               >
                 Book Arcade
               </motion.div>
@@ -42,16 +42,16 @@ export function Navbar({ isScrolled, onSearchClick, user }: NavbarProps) {
             
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-6">
-              <Link href="/" className="text-white hover:text-gray-300 transition-colors">
+              <Link href="/" className="text-white hover:text-gray-300 transition-colors underline-anim">
                 Home
               </Link>
-              <Link href="/upload" className="text-white hover:text-gray-300 transition-colors flex items-center gap-1">
+              <Link href="/upload" className="text-white hover:text-gray-300 transition-colors underline-anim flex items-center gap-1">
                 <Upload className="w-4 h-4" /> Upload
               </Link>
-              <Link href="/browse" className="text-white hover:text-gray-300 transition-colors">
+              <Link href="/browse" className="text-white hover:text-gray-300 transition-colors underline-anim">
                 Browse
               </Link>
-              <Link href="#" className="text-white hover:text-gray-300 transition-colors">
+              <Link href="#" className="text-white hover:text-gray-300 transition-colors underline-anim">
                 Trending
               </Link>
             </div>
@@ -125,7 +125,7 @@ export function Navbar({ isScrolled, onSearchClick, user }: NavbarProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors touch-target"
+                className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors touch-target btn-shine"
               >
                 Sign In
               </motion.button>

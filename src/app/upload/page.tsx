@@ -41,14 +41,14 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pt-20 px-4 mobile-padding">
+    <div className="min-h-screen bg-black bg-grid text-white pt-20 px-4 mobile-padding">
       <div className="max-w-xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-2xl sm:text-3xl font-bold mb-6">Add a PDF by URL</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold gradient-text mb-6">Add a PDF by URL</h1>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -111,7 +111,7 @@ export default function UploadPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-60 rounded-lg px-6 py-4 font-semibold text-lg touch-target"
+              className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-60 rounded-lg px-6 py-4 font-semibold text-lg touch-target btn-shine"
             >
               {isSubmitting ? 'Adding...' : 'Add Book'}
             </motion.button>
