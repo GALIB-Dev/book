@@ -192,6 +192,20 @@ export const mockBooks: Book[] = [
     publishedYear: 2024,
     pageCount: 100,
     isInLibrary: true
+  },
+  {
+    id: '14',
+    title: 'New Book from Mega',
+    author: 'Various Authors',
+    coverUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=NewBook&backgroundColor=2a4365',
+    description: 'A new book added from Mega file sharing platform.',
+    pdfUrl: 'https://mega.nz/file/T1g0SQpI#xvLG7G6yfb9lSH85-fydK_bHB_8zEwqnaY_SHKJa1H8',
+    format: 'PDF',
+    genre: 'General',
+    rating: 4.2,
+    publishedYear: 2025,
+    pageCount: 150,
+    isInLibrary: true
   }
 ]
 
