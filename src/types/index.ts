@@ -4,7 +4,9 @@ export interface Book {
   author: string;
   coverUrl: string;
   description: string;
-  pdfUrl: string;
+  pdfUrl?: string;
+  epubUrl?: string;
+  format: 'PDF' | 'EPUB' | 'BOTH';
   genre: string;
   rating: number;
   publishedYear: number;

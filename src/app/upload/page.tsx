@@ -12,12 +12,14 @@ export default function UploadPage() {
   const [author, setAuthor] = useState('')
   const [coverUrl, setCoverUrl] = useState('')
   const [pdfUrl, setPdfUrl] = useState('')
+  const [epubUrl, setEpubUrl] = useState('')
+  const [format, setFormat] = useState<'PDF' | 'EPUB' | 'BOTH'>('PDF')
   const [genre, setGenre] = useState('General')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!title || !author || !pdfUrl) return
+    if (!title || !author || (!pdfUrl && !epubUrl)) return
     setIsSubmitting(true)
 
     const newBook: Book = {
@@ -26,7 +28,9 @@ export default function UploadPage() {
       author,
       coverUrl: coverUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(title)}`,
       description: `${title} by ${author}`,
-      pdfUrl,
+      pdfUrl: format === 'PDF' || format === 'BOTH' ? pdfUrl : undefined,
+      epubUrl: format === 'EPUB' || format === 'BOTH' ? epubUrl : undefined,
+      format,
       genre,
       rating: 0,
       publishedYear: new Date().getFullYear(),
@@ -48,7 +52,7 @@ export default function UploadPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-2xl sm:text-3xl font-bold gradient-text mb-6">Add a PDF by URL</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold gradient-text mb-6">Add a Book</h1>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -74,6 +78,20 @@ export default function UploadPage() {
             </div>
 
             <div>
+              <label className="block text-sm text-gray-300 mb-2">Format *</label>
+              <select
+                value={format}
+                onChange={e => setFormat(e.target.value as 'PDF' | 'EPUB' | 'BOTH')}
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-600 text-white"
+                required
+              >
+                <option value="PDF">PDF Only</option>
+                <option value="EPUB">EPUB Only</option>
+                <option value="BOTH">Both PDF & EPUB</option>
+              </select>
+            </div>
+
+            <div>
               <label className="block text-sm text-gray-300 mb-2">Cover URL (optional)</label>
               <input
                 value={coverUrl}
@@ -84,17 +102,33 @@ export default function UploadPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-300 mb-2">PDF URL *</label>
-              <input
-                value={pdfUrl}
-                onChange={e => setPdfUrl(e.target.value)}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-600 text-white placeholder-gray-400"
-                placeholder="https://...pdf"
-                type="url"
-                required
-              />
-            </div>
+            {(format === 'PDF' || format === 'BOTH') && (
+              <div>
+                <label className="block text-sm text-gray-300 mb-2">PDF URL {format === 'BOTH' ? '(optional)' : '*'}</label>
+                <input
+                  value={pdfUrl}
+                  onChange={e => setPdfUrl(e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-600 text-white placeholder-gray-400"
+                  placeholder="https://...pdf"
+                  type="url"
+                  required={format === 'PDF'}
+                />
+              </div>
+            )}
+
+            {(format === 'EPUB' || format === 'BOTH') && (
+              <div>
+                <label className="block text-sm text-gray-300 mb-2">EPUB URL {format === 'BOTH' ? '(optional)' : '*'}</label>
+                <input
+                  value={epubUrl}
+                  onChange={e => setEpubUrl(e.target.value)}
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-600 text-white placeholder-gray-400"
+                  placeholder="https://...epub"
+                  type="url"
+                  required={format === 'EPUB'}
+                />
+              </div>
+            )}
 
             <div>
               <label className="block text-sm text-gray-300 mb-2">Genre</label>
@@ -121,5 +155,3 @@ export default function UploadPage() {
     </div>
   )
 }
-
-
