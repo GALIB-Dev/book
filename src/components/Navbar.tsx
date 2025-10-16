@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Menu, User, Bell, LogOut } from 'lucide-react'
+import { Search, Menu, User, Bell, LogOut, Upload } from 'lucide-react'
+import Link from 'next/link'
 import Image from 'next/image'
 
 interface NavbarProps {
@@ -38,18 +39,18 @@ export function Navbar({ isScrolled, onSearchClick, user }: NavbarProps) {
             
             {/* Navigation Links */}
             <div className="hidden md:flex items-center gap-6">
-              <a href="#" className="text-white hover:text-gray-300 transition-colors">
+              <Link href="/" className="text-white hover:text-gray-300 transition-colors">
                 Home
-              </a>
-              <a href="#" className="text-white hover:text-gray-300 transition-colors">
-                My Library
-              </a>
-              <a href="#" className="text-white hover:text-gray-300 transition-colors">
+              </Link>
+              <Link href="/upload" className="text-white hover:text-gray-300 transition-colors flex items-center gap-1">
+                <Upload className="w-4 h-4" /> Upload
+              </Link>
+              <Link href="/browse" className="text-white hover:text-gray-300 transition-colors">
                 Browse
-              </a>
-              <a href="#" className="text-white hover:text-gray-300 transition-colors">
+              </Link>
+              <Link href="#" className="text-white hover:text-gray-300 transition-colors">
                 Trending
-              </a>
+              </Link>
             </div>
           </div>
           

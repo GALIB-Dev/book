@@ -1,4 +1,5 @@
 import { Book } from '@/types'
+import { loadUserBooks } from '@/lib/storage'
 
 // Mock data for demonstration with real book cover images
 export const mockBooks: Book[] = [
@@ -165,27 +166,37 @@ export const mockBooks: Book[] = [
   }
 ]
 
+export const getAllBooks = (): Book[] => {
+  // Merge mock books with user-added books from localStorage (client-side)
+  const userBooks = loadUserBooks()
+  const byId = new Map<string, Book>()
+  for (const b of mockBooks) byId.set(b.id, b)
+  for (const b of userBooks) byId.set(b.id, b)
+  return Array.from(byId.values())
+}
+
 export const getFeaturedBook = (): Book => {
-  return mockBooks.find(book => book.isFeatured) || mockBooks[0]
+  const books = getAllBooks()
+  return books.find(book => book.isFeatured) || books[0]
 }
 
 export const getBooksByGenre = (genre: string): Book[] => {
-  return mockBooks.filter(book => book.genre === genre)
+  return getAllBooks().filter(book => book.genre === genre)
 }
 
 export const getCurrentlyReading = (): Book[] => {
-  return mockBooks.filter(book => book.currentPage && book.currentPage > 0)
+  return getAllBooks().filter(book => book.currentPage && book.currentPage > 0)
 }
 
 export const getMyLibrary = (): Book[] => {
-  return mockBooks.filter(book => book.isInLibrary)
+  return getAllBooks().filter(book => book.isInLibrary)
 }
 
 export const getTrendingBooks = (): Book[] => {
-  return mockBooks.sort((a, b) => b.rating - a.rating).slice(0, 6)
+  return [...getAllBooks()].sort((a, b) => b.rating - a.rating).slice(0, 6)
 }
 
 export const getNewReleases = (): Book[] => {
   const currentYear = new Date().getFullYear()
-  return mockBooks.filter(book => book.publishedYear >= currentYear - 2)
+  return getAllBooks().filter(book => book.publishedYear >= currentYear - 2)
 }
