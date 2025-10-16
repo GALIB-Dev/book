@@ -6,6 +6,7 @@ export interface Book {
   description: string;
   pdfUrl?: string;
   epubUrl?: string;
+  megaUrl?: string; // Added support for Mega links
   format: 'PDF' | 'EPUB' | 'BOTH';
   genre: string;
   rating: number;

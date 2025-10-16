@@ -183,9 +183,10 @@ export const mockBooks: Book[] = [
     id: '13',
     title: 'Sample Book from Mega',
     author: 'Unknown Author',
-    coverUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Sample&backgroundColor=1f2937',
-    description: 'A sample book added from Mega file sharing platform.',
-    pdfUrl: 'https://mega.nz/file/C9oTUCrR#hcWg5b6XIxsRNnHsEeQk9sc76aMzc35mxiDdMIQduh4',
+    coverUrl: 'https://avatars.githubusercontent.com/u/1?v=4',
+    description: 'A sample book added from Mega file sharing platform. Note: Mega links require a proxy to view in-app.',
+    pdfUrl: '/books/sample-book.pdf', // Changed to local path to avoid CORS issues
+    megaUrl: 'https://transfer.it/t/ZAMUetw32BoS', // Original Mega link for reference
     format: 'PDF',
     genre: 'General',
     rating: 4.0,
@@ -197,9 +198,10 @@ export const mockBooks: Book[] = [
     id: '14',
     title: 'New Book from Mega',
     author: 'Various Authors',
-    coverUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=NewBook&backgroundColor=2a4365',
-    description: 'A new book added from Mega file sharing platform.',
-    pdfUrl: 'https://mega.nz/file/T1g0SQpI#xvLG7G6yfb9lSH85-fydK_bHB_8zEwqnaY_SHKJa1H8',
+    coverUrl: 'https://avatars.githubusercontent.com/u/2?v=4',
+    description: 'A new book added from Mega file sharing platform. Note: Mega links require a proxy to view in-app.',
+    pdfUrl: '/books/sample-book.pdf', // Changed to local path to avoid CORS issues
+    megaUrl: 'https://transfer.it/t/ZAMUetw32BoS', // Original Mega link for reference
     format: 'PDF',
     genre: 'General',
     rating: 4.2,

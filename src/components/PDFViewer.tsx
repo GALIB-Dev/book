@@ -38,10 +38,18 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [showMobileControls, setShowMobileControls] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages)
     setIsLoading(false)
+    setLoadError(null)
+  }
+  
+  const onDocumentLoadError = (error: Error) => {
+    console.error('Error loading PDF:', error)
+    setIsLoading(false)
+    setLoadError(`Error loading PDF: ${error.message}`)
   }
 
   const goToPreviousPage = () => {
@@ -339,17 +347,39 @@ export function PDFViewer({ book, onClose }: PDFViewerProps) {
             </div>
           )}
           
-          <Document
-            file={book.pdfUrl}
-            onLoadSuccess={onDocumentLoadSuccess}
-            loading={<div className="text-white">Loading PDF...</div>}
-            error={<div className="text-red-500">Failed to load PDF</div>}
-          >
-            <Page
-              pageNumber={currentPage}
-              scale={scale}
-              rotate={rotation}
-              renderTextLayer={true}
+          {loadError ? (
+            <div className="bg-red-50 p-4 rounded-lg border border-red-200 m-8">
+              <h3 className="text-red-800 font-medium">Error Loading PDF</h3>
+              <p className="text-red-700 mt-2">{loadError}</p>
+              <p className="text-sm text-gray-700 mt-4">
+                {book.megaUrl && "This book is linked from Mega, which doesn't allow direct viewing in browsers."}
+              </p>
+              {book.megaUrl && (
+                <a 
+                  href={book.megaUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Download from Mega
+                </a>
+              )}
+            </div>
+          ) : (
+            <Document
+              file={book.pdfUrl}
+              onLoadSuccess={onDocumentLoadSuccess}
+              onLoadError={onDocumentLoadError}
+              loading={<div className="text-white">Loading PDF...</div>}
+            >
+              <Page
+                pageNumber={currentPage}
+                scale={scale}
+                rotate={rotation}
+                renderTextLayer={true}
+              />
+            </Document>
+          )}
               renderAnnotationLayer={true}
               className="shadow-2xl"
             />

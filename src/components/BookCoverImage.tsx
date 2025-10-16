@@ -100,6 +100,7 @@ export function BookCoverImage({
       onError={handleImageError}
       onLoad={handleImageLoad}
       sizes={sizes}
+      priority={src.includes("8225261")} // Add priority for the LCP image (Great Gatsby cover)
     />
   )
 }
