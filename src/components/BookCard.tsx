@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { BookCoverImage } from './BookCoverImage'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Book } from '@/types'
 import { Play, Plus, Check, Clock } from 'lucide-react'
+import { extractPDFCover } from '@/lib/pdfCovers'
 
 interface BookCardProps {
   book: Book
@@ -14,7 +15,27 @@ interface BookCardProps {
 export function BookCard({ book, onBookClick }: BookCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [isInLibrary, setIsInLibrary] = useState(book.isInLibrary)
+  const [pdfCoverUrl, setPdfCoverUrl] = useState<string | null>(null)
+  const [isLoadingPdfCover, setIsLoadingPdfCover] = useState(false)
 
+  // Extract PDF cover when component mounts
+  useEffect(() => {
+    // Only try to extract cover if it's a PDF and we're client-side
+    if (typeof window !== 'undefined' && book.pdfUrl && !book.pdfUrl.includes('mega.nz') && book.format !== 'EPUB') {
+      setIsLoadingPdfCover(true)
+      
+      extractPDFCover(book.pdfUrl)
+        .then(coverUrl => {
+          setPdfCoverUrl(coverUrl)
+          setIsLoadingPdfCover(false)
+        })
+        .catch(error => {
+          console.error(`Failed to extract PDF cover for ${book.title}:`, error)
+          setIsLoadingPdfCover(false)
+        })
+    }
+  }, [book])
+  
   const handleAddToLibrary = (e: React.MouseEvent) => {
     e.stopPropagation()
     setIsInLibrary(!isInLibrary)
@@ -33,8 +54,15 @@ export function BookCard({ book, onBookClick }: BookCardProps) {
     >
       {/* Book Cover */}
       <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
+        {/* Show loading indicator while extracting PDF cover */}
+        {isLoadingPdfCover && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 z-10">
+            <div className="w-8 h-8 border-4 border-t-red-500 border-gray-300 rounded-full animate-spin"></div>
+          </div>
+        )}
+        
         <BookCoverImage
-          src={book.coverUrl}
+          src={pdfCoverUrl || book.coverUrl}
           alt={book.title}
           title={book.title}
           author={book.author}
